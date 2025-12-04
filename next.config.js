@@ -18,6 +18,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.supabase.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.discordapp.com',
+      },
     ],
   },
   // Configuração vazia do Turbopack para silenciar o aviso do Next.js 16

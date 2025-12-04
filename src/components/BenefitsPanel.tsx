@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { 
   X, Gift, Check, Clock, AlertCircle, 
   MessageCircle, Copy, ExternalLink, 
@@ -127,12 +128,16 @@ export default function BenefitsPanel({ isOpen, onClose, onOpenOnboarding }: Ben
               <button
                 onClick={loadBenefits}
                 className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                title="Atualizar benefícios"
+                aria-label="Atualizar benefícios"
               >
                 <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
               </button>
               <button
                 onClick={onClose}
                 className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                title="Fechar painel"
+                aria-label="Fechar painel"
               >
                 <X size={18} />
               </button>
@@ -175,12 +180,14 @@ export default function BenefitsPanel({ isOpen, onClose, onOpenOnboarding }: Ben
                 <div className="p-3 bg-zinc-800/50 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center overflow-hidden">
                         {discordConnection?.discord_avatar ? (
-                          <img 
+                          <Image 
                             src={discordConnection.discord_avatar} 
                             alt="Discord" 
-                            className="w-full h-full rounded-full"
+                            width={32}
+                            height={32}
+                            className="w-full h-full rounded-full object-cover"
                           />
                         ) : (
                           <span className="text-white text-sm">D</span>

@@ -1,0 +1,17 @@
+# Robots.txt for WaveIGL
+# https://waveigl.com
+
+User-agent: *
+Allow: /
+
+# Bloquear paginas de autenticacao
+Disallow: /auth/
+Disallow: /dashboard/
+Disallow: /api/
+
+# Permitir assets
+Allow: /images/
+
+# Sitemap
+Sitemap: https://waveigl.com/sitemap.xml
+

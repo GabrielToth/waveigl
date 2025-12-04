@@ -9,6 +9,7 @@ import { UnifiedChat } from '@/components/UnifiedChat'
 import { PlatformSelector } from '@/components/PlatformSelector'
 import { Platform, UnifiedMessage } from '@/types'
 import { LogOut, LogIn, Settings, Twitch, Youtube, Link as LinkIcon, Unlink, CheckCircle2, AlertTriangle, Crown, Zap, Shield, User } from 'lucide-react'
+import Image from 'next/image'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { ProfileEditor } from '@/components/ProfileEditor'
 import { Input } from '@/components/ui/input'
@@ -17,6 +18,7 @@ import { ModerationPanel } from '@/components/ModerationPanel'
 import BenefitsIndicator, { SubBadge } from '@/components/BenefitsIndicator'
 import SubscriberBenefitsPopup from '@/components/SubscriberBenefitsPopup'
 import BenefitsPanel from '@/components/BenefitsPanel'
+import { getUserRole } from '@/lib/permissions'
 
 // Configuração visual dos cargos
 const ROLE_CONFIG: Record<string, { label: string; color: string; bgColor: string; icon: React.ReactNode }> = {
@@ -236,11 +238,22 @@ export default function DashboardPage() {
     try {
       const res = await fetch('/api/me')
       const data = await res.json()
-      setUser(data.user)
-      setLinkedAccounts(data.linked_accounts || [])
+      const linkedAccounts = data.linked_accounts || []
+      
+      // Determinar role correto baseado nas contas vinculadas (mais confiável)
+      const computedRole = getUserRole(linkedAccounts)
+      
+      // Se o role computado for diferente do banco, usar o computado (prioridade)
+      const finalRole = computedRole !== 'member' ? computedRole : (data.user?.role || 'user')
+      
+      setUser({
+        ...data.user,
+        role: finalRole
+      })
+      setLinkedAccounts(linkedAccounts)
       setAccountsNeedingReauth(data.accounts_needing_reauth || [])
       // Verificar se é moderador pelo banco de dados ou pelo campo is_moderator
-      setIsModerator(!!data.user?.is_moderator || !!data.is_moderator)
+      setIsModerator(!!data.user?.is_moderator || !!data.is_moderator || finalRole === 'moderator' || finalRole === 'admin' || finalRole === 'owner')
     } catch (e) {
       console.error('Falha ao carregar /api/me', e)
     }
@@ -594,12 +607,20 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-400 rounded-lg"></div>
+              <Image 
+                src="/favicon.webp" 
+                alt="WaveIGL" 
+                width={32} 
+                height={32}
+                className="rounded-lg"
+              />
               <span className="text-xl font-bold text-foreground">WaveIGL</span>
             </div>
-            <Badge className="bg-primary text-primary-foreground">
-              Clube Ativo
-            </Badge>
+            {benefits.length > 0 && benefits.some(b => !b.expires_at || new Date(b.expires_at) > new Date()) && (
+              <Badge className="bg-primary text-primary-foreground">
+                Clube Ativo
+              </Badge>
+            )}
           </div>
           
           <div className="flex items-center space-x-4">
@@ -608,12 +629,21 @@ export default function DashboardPage() {
                 <div className="flex items-center space-x-3">
                   <span className="text-foreground font-medium">{getDisplayName()}</span>
                   {/* Badge de cargo */}
-                  {user.role && ROLE_CONFIG[user.role] && (
-                    <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full ${ROLE_CONFIG[user.role].bgColor} ${ROLE_CONFIG[user.role].color}`}>
-                      {ROLE_CONFIG[user.role].icon}
-                      <span className="text-xs font-medium">{ROLE_CONFIG[user.role].label}</span>
-                    </div>
-                  )}
+                  {(() => {
+                    // Determinar role final (priorizar role computado das contas vinculadas)
+                    const computedRole = getUserRole(linkedAccounts)
+                    const displayRole = computedRole !== 'member' ? computedRole : (user.role || 'user')
+                    
+                    // Mapear 'owner' para 'streamer' na UI
+                    const uiRole = displayRole === 'owner' ? 'streamer' : displayRole
+                    
+                    return uiRole && ROLE_CONFIG[uiRole] && (
+                      <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full ${ROLE_CONFIG[uiRole].bgColor} ${ROLE_CONFIG[uiRole].color}`}>
+                        {ROLE_CONFIG[uiRole].icon}
+                        <span className="text-xs font-medium">{ROLE_CONFIG[uiRole].label}</span>
+                      </div>
+                    )
+                  })()}
                 </div>
 
                 <ProfileEditor user={user} onUpdate={loadUser} />

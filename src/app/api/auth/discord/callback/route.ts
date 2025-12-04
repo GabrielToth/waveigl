@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
         discord_username: discordUser.global_name || discordUser.username,
         discord_discriminator: discordUser.discriminator !== '0' ? discordUser.discriminator : null,
         discord_avatar: discordUser.avatar 
-          ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
+          ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.webp`
           : null,
         connected_at: new Date().toISOString()
       }, {
