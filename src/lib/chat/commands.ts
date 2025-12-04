@@ -5,6 +5,7 @@
 
 import { getSupabaseAdmin } from '@/lib/supabase/server'
 import { queueMessage } from './queue'
+import { createOrUpdateBenefit } from '@/lib/benefits'
 import tmi from 'tmi.js'
 
 // Configuração
@@ -289,6 +290,7 @@ async function broadcastSubscriptionMessage(message: string, priority: 'high' | 
 /**
  * Processa o comando !testsub (apenas mods)
  * Simula uma inscrição do próprio usuário
+ * Cria o benefício no sistema para triggar o popup de onboarding
  */
 async function handleTestSubCommand(ctx: CommandContext): Promise<void> {
   console.log(`[Commands] Processando !testsub de ${ctx.username}`)
@@ -300,6 +302,33 @@ async function handleTestSubCommand(ctx: CommandContext): Promise<void> {
   }
   
   const platformName = getPlatformDisplayName(ctx.platform)
+  const db = getSupabaseAdmin()
+  
+  // Buscar user_id do usuário que executou o comando
+  const { data: linkedAccount } = await db
+    .from('linked_accounts')
+    .select('user_id')
+    .eq('platform', ctx.platform)
+    .eq('platform_user_id', ctx.userId)
+    .maybeSingle()
+  
+  if (linkedAccount?.user_id) {
+    // Criar benefício para o usuário (isso vai triggar o popup no frontend)
+    const benefit = await createOrUpdateBenefit(
+      linkedAccount.user_id,
+      ctx.platform as 'twitch' | 'kick' | 'youtube',
+      'Tier 1 (Teste)',
+      false
+    )
+    
+    if (benefit) {
+      console.log(`[Commands] ✅ Benefício criado para ${ctx.username} (ID: ${benefit.id})`)
+    } else {
+      console.warn(`[Commands] ⚠️ Não foi possível criar benefício para ${ctx.username}`)
+    }
+  } else {
+    console.log(`[Commands] ⚠️ Usuário ${ctx.username} não está cadastrado no sistema`)
+  }
   
   // Mensagem de inscrição
   const subMessage = `🎉 @${ctx.username} se inscreveu com Tier 1 na ${platformName} - Por enquanto, envie seu whatsapp no sussuro para ser convidado para o grupo exclusivo.`
@@ -320,6 +349,7 @@ async function handleTestSubCommand(ctx: CommandContext): Promise<void> {
 /**
  * Processa o comando !testrecebersub (apenas mods)
  * Simula o recebimento de uma inscrição de presente
+ * Cria o benefício no sistema (quem recebe gift sub ganha benefício)
  */
 async function handleTestReceiveSubCommand(ctx: CommandContext): Promise<void> {
   console.log(`[Commands] Processando !testrecebersub de ${ctx.username}`)
@@ -332,6 +362,34 @@ async function handleTestReceiveSubCommand(ctx: CommandContext): Promise<void> {
   
   const platformName = getPlatformDisplayName(ctx.platform)
   const gifterName = 'principedosdragoes'
+  const db = getSupabaseAdmin()
+  
+  // Buscar user_id do usuário que executou o comando (recebedor)
+  const { data: linkedAccount } = await db
+    .from('linked_accounts')
+    .select('user_id')
+    .eq('platform', ctx.platform)
+    .eq('platform_user_id', ctx.userId)
+    .maybeSingle()
+  
+  if (linkedAccount?.user_id) {
+    // Criar benefício para o recebedor (isso vai triggar o popup no frontend)
+    const benefit = await createOrUpdateBenefit(
+      linkedAccount.user_id,
+      ctx.platform as 'twitch' | 'kick' | 'youtube',
+      'Tier 1 (Teste - Gift)',
+      true, // É um gift
+      gifterName
+    )
+    
+    if (benefit) {
+      console.log(`[Commands] ✅ Benefício gift criado para ${ctx.username} (ID: ${benefit.id})`)
+    } else {
+      console.warn(`[Commands] ⚠️ Não foi possível criar benefício para ${ctx.username}`)
+    }
+  } else {
+    console.log(`[Commands] ⚠️ Usuário ${ctx.username} não está cadastrado no sistema`)
+  }
   
   // Mensagem de recebimento de sub
   const subMessage = `🎁 @${ctx.username} recebeu inscrição de presente com Tier 1 de @${gifterName} na ${platformName} - Por enquanto, envie seu whatsapp no sussuro para ser convidado para o grupo exclusivo.`
