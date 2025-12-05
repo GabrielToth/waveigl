@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle, Users, MessageSquare, Zap, Star, Trophy, Gamepad2, ChevronRight, Play } from 'lucide-react'
+import { CheckCircle, Users, Star, Trophy, Gamepad2, ChevronRight, Play, Lock, GraduationCap, Clock, Shield } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
@@ -154,14 +154,20 @@ export default function LandingPage() {
                 <div className="absolute -right-20 top-1/3 w-40 h-80 bg-[#3B82F6]/20 blur-[100px] rounded-full" />
                 
                 {/* Main image */}
+                {/* Nota: unoptimized é necessário para preservar a transparência do WebP */}
                 <div className="relative">
                   <Image 
                     src="/waveigl.webp" 
                     alt="WaveIGL - Conrado Koerich" 
                     width={500} 
                     height={500}
-                    className="relative z-10 rounded-2xl"
+                    className="relative z-10 rounded-2xl bg-transparent"
+                    style={{ 
+                      backgroundColor: 'transparent',
+                      backgroundImage: 'none'
+                    }}
                     priority
+                    unoptimized
                   />
                   {/* Orange neon line left */}
                   <div className="absolute -left-8 top-1/4 bottom-1/4 w-1 bg-gradient-to-b from-transparent via-[#E38817] to-transparent opacity-60" />
@@ -190,10 +196,10 @@ export default function LandingPage() {
                 
                 {/* Subtitle */}
                 <p className="text-xl md:text-2xl text-[#D9D9D9]/70 mb-3 leading-relaxed">
-                  Faça parte da maior comunidade de CS2 do Brasil
+                  Comunidade exclusiva de aprendizado de CS2
                 </p>
                 <p className="text-base text-[#D9D9D9]/50 mb-8">
-                  Chat unificado • Discord VIP • Conteúdo exclusivo • Aulas gratuitas
+                  Discord VIP • Aulas ao vivo exclusivas • Conteúdo denso • Comunidade fechada
                 </p>
                 
                 {/* CTA Buttons */}
@@ -239,40 +245,40 @@ export default function LandingPage() {
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               Por que o <span className="text-[#E38817]">Clube WaveIGL</span>?
             </h2>
-            <p className="text-[#D9D9D9]/60 text-lg">Benefícios exclusivos para membros</p>
+            <p className="text-[#D9D9D9]/60 text-lg">Comunidade exclusiva para quem quer evoluir no CS2</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               {
-                icon: <MessageSquare className="w-8 h-8" />,
-                title: 'Chat Unificado',
-                description: 'Conecte-se com a comunidade em Twitch, YouTube e Kick simultaneamente'
+                icon: <Users className="w-8 h-8" />,
+                title: 'Discord VIP Exclusivo',
+                description: 'Acesso a uma comunidade fechada apenas para assinantes do Clube, onde você interage diretamente com outros membros e o WaveIGL'
               },
               {
-                icon: <Users className="w-8 h-8" />,
-                title: 'Discord VIP',
-                description: 'Acesso exclusivo a canais, cargos especiais e interação direta com Wave'
+                icon: <GraduationCap className="w-8 h-8" />,
+                title: 'Aulas Ao Vivo Exclusivas',
+                description: 'Aulas ao vivo no Discord que não são gravadas nem salvas. Conteúdo denso e avançado que não é apresentado nas lives públicas'
+              },
+              {
+                icon: <Clock className="w-8 h-8" />,
+                title: 'Flexibilidade Total',
+                description: 'Aulas variadas conforme o WaveIGL quiser, no horário que ele quiser, pelo tempo que ele quiser. Conteúdo adaptado às necessidades da comunidade'
               },
               {
                 icon: <Gamepad2 className="w-8 h-8" />,
-                title: 'Aulas Gratuitas',
-                description: 'Aprenda CS2 com quem foi Top 9 nacional e ensina há mais de 7 anos'
+                title: 'Aprenda com o Melhor',
+                description: 'Aprenda CS2 com quem foi Top 9 nacional e ensina há mais de 7 anos. O mesmo conhecimento das aulas particulares, por uma fração do preço'
               },
               {
-                icon: <Zap className="w-8 h-8" />,
-                title: 'Conteúdo Exclusivo',
-                description: 'Lives especiais, análises de demos e conteúdo behind-the-scenes'
+                icon: <Lock className="w-8 h-8" />,
+                title: 'Conteúdo Protegido',
+                description: 'Nenhum conteúdo interno pode ser gravado ou postado. Aulas e discussões permanecem exclusivas para membros do Clube'
               },
               {
-                icon: <Trophy className="w-8 h-8" />,
-                title: 'Sorteios',
-                description: 'Participe de sorteios exclusivos de skins, incluindo Dragon Lore'
-              },
-              {
-                icon: <Star className="w-8 h-8" />,
-                title: 'Suporte Prioritário',
-                description: 'Tire dúvidas diretamente com moderadores e o próprio Wave'
+                icon: <Shield className="w-8 h-8" />,
+                title: 'Comunidade Selecionada',
+                description: 'Faça parte de um grupo seleto de pessoas comprometidas em evoluir no CS2. Ambiente focado em aprendizado e crescimento'
               }
             ].map((feature, i) => (
               <Card 
@@ -329,12 +335,12 @@ export default function LandingPage() {
                 
                 <ul className="space-y-4 mb-8 text-left">
                   {[
-                    'Chat unificado em todas as plataformas',
-                    'Acesso ao Discord VIP',
-                    'Aulas de CS2 gratuitas',
-                    'Sorteios exclusivos de skins',
-                    'Suporte prioritário',
-                    'Badge exclusivo no chat'
+                    'Acesso ao Discord VIP exclusivo',
+                    'Aulas ao vivo não gravadas',
+                    'Conteúdo denso e avançado de CS2',
+                    'Aulas variadas conforme disponibilidade',
+                    'Comunidade fechada e selecionada',
+                    'Mesmo conhecimento das aulas particulares'
                   ].map((item, i) => (
                     <li key={i} className="flex items-center text-[#D9D9D9]/80">
                       <CheckCircle className="w-5 h-5 text-[#E38817] mr-3 flex-shrink-0" />
