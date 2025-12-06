@@ -82,6 +82,9 @@ export function getMissingScopes(
 
 import { UserRole } from '@/types'
 
+// Re-exportar para manter compatibilidade com imports existentes
+export { UserRole }
+
 /**
  * Hierarquia de cargos (maior número = maior permissão)
  * owner e streamer são equivalentes (nível máximo)
