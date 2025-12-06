@@ -8,7 +8,7 @@ import { VideoPlayer } from '@/components/VideoPlayer'
 import { UnifiedChat } from '@/components/UnifiedChat'
 import { PlatformSelector } from '@/components/PlatformSelector'
 import { Platform, UnifiedMessage } from '@/types'
-import { LogOut, LogIn, Settings, Twitch, Youtube, Link as LinkIcon, Unlink, CheckCircle2, AlertTriangle, Crown, Zap, Shield, User } from 'lucide-react'
+import { LogOut, LogIn, Settings, Twitch, Youtube, Link as LinkIcon, Unlink, CheckCircle2, AlertTriangle, Crown, Zap, Shield, User, CreditCard, XCircle } from 'lucide-react'
 import Image from 'next/image'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { ProfileEditor } from '@/components/ProfileEditor'
@@ -18,6 +18,7 @@ import { ModerationPanel } from '@/components/ModerationPanel'
 import BenefitsIndicator, { SubBadge } from '@/components/BenefitsIndicator'
 import SubscriberBenefitsPopup from '@/components/SubscriberBenefitsPopup'
 import BenefitsPanel from '@/components/BenefitsPanel'
+import ClubOnboardingPopup from '@/components/ClubOnboardingPopup'
 import { getUserRole } from '@/lib/permissions'
 
 // Configuração visual dos cargos
@@ -226,6 +227,11 @@ export default function DashboardPage() {
   const [showBenefitsPanel, setShowBenefitsPanel] = useState(false)
   const [pendingBenefit, setPendingBenefit] = useState<any>(null)
   
+  // Estados para assinatura do Clube
+  const [showClubOnboarding, setShowClubOnboarding] = useState(false)
+  const [clubOnboardingData, setClubOnboardingData] = useState<any>(null)
+  const [isClubMember, setIsClubMember] = useState(false)
+  
   // Status do YouTube (recebido via SSE para evitar polling)
   const [youtubeStatus, setYoutubeStatus] = useState<{
     isLive: boolean
@@ -343,6 +349,78 @@ export default function DashboardPage() {
     }
   }
   
+  // Verificar status de membro do Clube
+  const checkClubStatus = async () => {
+    try {
+      const res = await fetch('/api/subscription/check-eligibility')
+      if (res.ok) {
+        const data = await res.json()
+        setIsClubMember(data.user?.subscription_status === 'active')
+        setClubOnboardingData(data.user)
+      }
+    } catch (e) {
+      console.error('Erro ao verificar status do clube:', e)
+    }
+  }
+  
+  // Iniciar processo de assinatura do Clube
+  const handleSubscribeClick = async () => {
+    try {
+      const res = await fetch('/api/subscription/check-eligibility')
+      const data = await res.json()
+      
+      if (data.eligible) {
+        // Se já tem todos os dados, ir direto para checkout
+        goToCheckout()
+      } else {
+        // Mostrar popup de onboarding
+        setClubOnboardingData(data.user)
+        setShowClubOnboarding(true)
+      }
+    } catch (e) {
+      console.error('Erro ao iniciar assinatura:', e)
+      alert('Erro ao processar. Tente novamente.')
+    }
+  }
+  
+  // Ir para checkout do Mercado Pago
+  const goToCheckout = async () => {
+    try {
+      const res = await fetch('/api/subscription/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user?.id })
+      })
+      
+      const data = await res.json()
+      
+      if (res.status === 409 && data.already_subscribed) {
+        // Usuário já tem assinatura ativa
+        alert('Você já possui uma assinatura ativa do Clube WaveIGL. Se você não tem acesso, entre em contato com o suporte.')
+        // Recarregar status do clube
+        await checkClubStatus()
+        return
+      }
+      
+      if (data.init_point) {
+        // Redirecionar para o checkout do Mercado Pago
+        window.location.href = data.init_point
+      } else {
+        console.error('Erro ao criar assinatura:', data)
+        alert(data.error || 'Erro ao processar pagamento. Tente novamente.')
+      }
+    } catch (e) {
+      console.error('Erro ao criar assinatura:', e)
+      alert('Erro ao processar pagamento. Tente novamente.')
+    }
+  }
+  
+  // Callback quando onboarding completo
+  const handleOnboardingComplete = () => {
+    setShowClubOnboarding(false)
+    goToCheckout()
+  }
+  
   useEffect(() => {
     // Carregar dados do usuário e verificar moderador
     const initializeUser = async () => {
@@ -352,6 +430,22 @@ export default function DashboardPage() {
       await checkModeratorViaAPI()
       // Carregar benefícios
       await loadBenefits()
+      // Verificar status do Clube
+      await checkClubStatus()
+      
+      // Verificar se voltou do OAuth do Discord durante onboarding
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('onboarding') === 'continue') {
+        // Limpar URL
+        window.history.replaceState({}, '', '/dashboard')
+        // Verificar elegibilidade e continuar onboarding
+        const res = await fetch('/api/subscription/check-eligibility')
+        const data = await res.json()
+        if (!data.eligible) {
+          setClubOnboardingData(data.user)
+          setShowClubOnboarding(true)
+        }
+      }
     }
     initializeUser()
 
@@ -577,6 +671,34 @@ export default function DashboardPage() {
     }
   }
 
+  // Vincular Discord
+  const handleLinkDiscord = () => {
+    window.location.href = '/api/auth/discord'
+  }
+  
+  // Desvincular Discord
+  const handleUnlinkDiscord = async () => {
+    if (!confirm('Tem certeza que deseja desvincular o Discord?')) return
+    
+    try {
+      const res = await fetch('/api/auth/discord', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'disconnect' })
+      })
+      
+      if (res.ok) {
+        setDiscordConnection(null)
+        await loadBenefits() // Recarregar benefícios para atualizar status
+      } else {
+        const data = await res.json()
+        alert(data.error || 'Erro ao desvincular Discord')
+      }
+    } catch (error) {
+      alert('Erro ao desvincular Discord')
+    }
+  }
+
   const getLinkedAccount = (platform: string) => {
     return linkedAccounts.find(acc => acc.platform === platform) || null
   }
@@ -616,11 +738,30 @@ export default function DashboardPage() {
               />
               <span className="text-xl font-bold text-foreground">WaveIGL</span>
             </div>
-            {benefits.length > 0 && benefits.some(b => !b.expires_at || new Date(b.expires_at) > new Date()) && (
-              <Badge className="bg-primary text-primary-foreground">
-                Clube Ativo
-              </Badge>
-            )}
+            {/* Indicador de status do Clube + Botão de assinar */}
+            <div className="flex items-center gap-2">
+              {isClubMember ? (
+                <Badge className="bg-green-500/20 text-green-400 border border-green-500/30">
+                  <Crown className="w-3 h-3 mr-1" />
+                  Clube Ativo
+                </Badge>
+              ) : (
+                <>
+                  <Badge className="bg-zinc-700/50 text-zinc-400 border border-zinc-600">
+                    <XCircle className="w-3 h-3 mr-1" />
+                    Sem Clube
+                  </Badge>
+                  <Button
+                    onClick={handleSubscribeClick}
+                    size="sm"
+                    className="bg-gradient-to-r from-[#E38817] to-[#B86A10] hover:from-[#F59928] hover:to-[#E38817] text-white shadow-lg shadow-[#E38817]/25"
+                  >
+                    <CreditCard className="w-4 h-4 mr-2" />
+                    Assinar Clube
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -698,6 +839,43 @@ export default function DashboardPage() {
                       onLink={() => handleLinkAccount('kick')}
                       onUnlink={handleUnlinkAccount}
                     />
+                    
+                    {/* Discord - vinculação separada */}
+                    <div className={`border rounded-lg overflow-hidden ${discordConnection ? 'bg-muted/50' : 'bg-muted/50'}`}>
+                      <div className="flex items-center justify-between p-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 bg-[#5865F2] rounded flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                            </svg>
+                          </div>
+                          {discordConnection ? (
+                            <>
+                              <span className="text-sm font-medium">{discordConnection.discord_username}</span>
+                              <CheckCircle2 className="w-4 h-4 text-green-500" />
+                            </>
+                          ) : (
+                            <span className="text-sm text-muted-foreground">Discord</span>
+                          )}
+                        </div>
+                        {discordConnection ? (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={handleUnlinkDiscord}
+                            className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
+                          >
+                            <Unlink className="w-3 h-3 mr-2" />
+                            Desvincular
+                          </Button>
+                        ) : (
+                          <Button variant="outline" size="sm" onClick={handleLinkDiscord}>
+                            <LinkIcon className="w-3 h-3 mr-2" />
+                            Vincular
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </DialogContent>
@@ -872,6 +1050,16 @@ export default function DashboardPage() {
           setShowBenefitsPopup(true)
         }}
       />
+      
+      {/* Popup de onboarding para assinatura do Clube */}
+      {clubOnboardingData && (
+        <ClubOnboardingPopup
+          isOpen={showClubOnboarding}
+          onClose={() => setShowClubOnboarding(false)}
+          userData={clubOnboardingData}
+          onComplete={handleOnboardingComplete}
+        />
+      )}
     </div>
   )
 }

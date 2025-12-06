@@ -35,13 +35,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/dashboard?error=discord_invalid', request.url))
     }
 
-    // Decodificar state para obter userId
-    let stateData: { userId: string; timestamp: number }
+    // Decodificar state para obter userId e returnTo
+    let stateData: { userId: string; timestamp: number; returnTo?: string }
     try {
       stateData = JSON.parse(Buffer.from(state, 'base64url').toString())
     } catch {
       return NextResponse.redirect(new URL('/dashboard?error=discord_invalid_state', request.url))
     }
+    
+    // URL de redirecionamento padrão ou customizada
+    const baseRedirect = stateData.returnTo || '/dashboard'
 
     // Verificar se state não expirou (5 minutos)
     if (Date.now() - stateData.timestamp > 5 * 60 * 1000) {
@@ -152,15 +155,23 @@ export async function GET(request: NextRequest) {
       
       if (addResult.success) {
         console.log(`[Discord Callback] ✅ Usuário adicionado ao servidor Clube do WaveIGL`)
-        return NextResponse.redirect(new URL('/dashboard?success=discord_connected_server', request.url))
+        const redirectUrl = new URL(baseRedirect, request.url)
+        redirectUrl.searchParams.set('success', 'discord_connected_server')
+        return NextResponse.redirect(redirectUrl)
       } else {
         console.error(`[Discord Callback] ⚠️ Não foi possível adicionar ao servidor:`, addResult.error)
         // Ainda consideramos sucesso pois o Discord foi vinculado
-        return NextResponse.redirect(new URL('/dashboard?success=discord_connected&warning=server_add_failed', request.url))
+        const redirectUrl = new URL(baseRedirect, request.url)
+        redirectUrl.searchParams.set('success', 'discord_connected')
+        redirectUrl.searchParams.set('warning', 'server_add_failed')
+        return NextResponse.redirect(redirectUrl)
       }
     } else {
       console.log(`[Discord Callback] Usuário sem assinatura ativa, Discord vinculado apenas`)
-      return NextResponse.redirect(new URL('/dashboard?success=discord_connected&info=no_subscription', request.url))
+      const redirectUrl = new URL(baseRedirect, request.url)
+      redirectUrl.searchParams.set('success', 'discord_connected')
+      redirectUrl.searchParams.set('info', 'no_subscription')
+      return NextResponse.redirect(redirectUrl)
     }
 
   } catch (error) {

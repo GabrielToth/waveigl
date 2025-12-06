@@ -6,10 +6,13 @@ import { removeMemberFromServer } from '@/lib/discord/server'
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID
 const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/api/auth/discord/callback'
 
-// Scopes necessários:
-// - identify: para obter informações do usuário
-// - guilds.join: para adicionar ao servidor Clube do WaveIGL automaticamente
-const DISCORD_SCOPES = 'identify guilds.join'
+// Scopes configurados no Discord Developer Portal
+// - identify: obter informações do usuário (id, username, avatar)
+// - guilds.join: adicionar ao servidor Clube do WaveIGL automaticamente
+// - guilds: listar servidores do usuário
+// - guilds.members.read: ler membros dos servidores
+// - openid: autenticação OpenID Connect
+const DISCORD_SCOPES = 'identify guilds.join guilds openid'
 
 /**
  * GET /api/auth/discord
@@ -28,10 +31,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/dashboard?error=discord_not_configured', request.url))
     }
 
+    // Verificar se há return_to para redirecionar após OAuth
+    const returnTo = request.nextUrl.searchParams.get('return_to')
+
     // Gerar state para CSRF protection
     const state = Buffer.from(JSON.stringify({
       userId: session.userId,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      returnTo: returnTo || undefined
     })).toString('base64url')
 
     // Construir URL de autorização do Discord

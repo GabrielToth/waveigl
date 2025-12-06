@@ -6,8 +6,9 @@ import { parseSessionCookie } from '@/lib/auth/session'
  * Adiciona headers de segurança à resposta
  */
 function addSecurityHeaders(response: NextResponse): NextResponse {
-  // Prevenir clickjacking
-  response.headers.set('X-Frame-Options', 'DENY')
+  // Prevenir clickjacking - SAMEORIGIN permite nosso próprio conteúdo em iframes
+  // mas impede que outros sites incorporem nosso site (proteção contra clickjacking)
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('X-XSS-Protection', '1; mode=block')
   
@@ -22,20 +23,23 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
     response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
   }
   
-  // Content Security Policy básico
-  // Permite recursos do próprio domínio + CDNs necessários
+  // Content Security Policy
+  // Permite recursos do próprio domínio + CDNs necessários para players de vídeo
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://player.twitch.tv https://www.youtube.com https://kick.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://player.twitch.tv https://www.youtube.com https://kick.com https://www.youtube-nocookie.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: blob: https: http:",
-    "frame-src 'self' https://player.twitch.tv https://www.youtube.com https://kick.com https://embed.twitch.tv",
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.twitch.tv https://id.twitch.tv https://www.googleapis.com https://kick.com https://discord.com",
+    // Permitir iframes dos players de vídeo
+    "frame-src 'self' https://player.twitch.tv https://embed.twitch.tv https://www.youtube.com https://www.youtube-nocookie.com https://kick.com https://player.kick.com",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.twitch.tv https://id.twitch.tv https://www.googleapis.com https://kick.com https://discord.com wss://*.pusher.com",
     "media-src 'self' https:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
+    // frame-ancestors impede que nosso site seja incorporado em outros sites (proteção contra clickjacking)
+    // Isso NÃO impede que incorporemos outros sites (como os players)
     "frame-ancestors 'none'",
   ].join('; ')
   

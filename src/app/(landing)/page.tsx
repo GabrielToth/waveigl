@@ -115,9 +115,6 @@ export default function LandingPage() {
               <Link href="/midia-kit" className="text-[#D9D9D9]/70 hover:text-[#E38817] transition-colors">
                 Mídia Kit
               </Link>
-              <a href="https://twitch.tv/waveigl" target="_blank" rel="noopener noreferrer" className="text-[#D9D9D9]/70 hover:text-[#E38817] transition-colors">
-                Twitch
-              </a>
             </div>
             
             <div className="flex items-center space-x-3">
