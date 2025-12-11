@@ -327,7 +327,8 @@ export default function HomePage() {
                   Wave dedica sua carreira a ensinar e entreter jogadores de todos os níveis.
                 </p>
                 <p className="text-lg text-[#D9D9D9]/80 leading-relaxed mb-6">
-                  Em 2014, Wave se tornou <span className="text-[#E38817] font-semibold">DJ profissional</span>, tocando nos melhores eventos 
+                  Começou a jogar Counter-Strike em <span className="text-[#E38817] font-semibold">2001</span>, acumulando experiência competitiva que culminou em <span className="text-[#E38817] font-semibold">2011</span>, quando alcançou o <span className="text-[#E38817] font-semibold">Top 9 do Brasil em LAN</span> como IGL (stand-in) do time freNzy!. 
+                  Em 2014, se tornou <span className="text-[#E38817] font-semibold">DJ profissional</span>, tocando nos melhores eventos 
                   como <span className="text-[#E38817]">Café de la Musique, Oxygen Party, The Roof</span>, entre outros. Em 2017, por paixão ao ensino, 
                   se dedicou integralmente ao streaming e educação em CS.
                 </p>
@@ -364,6 +365,21 @@ export default function HomePage() {
               </h2>
               
               <div className="space-y-0">
+                <TimelineItem 
+                  year="2001"
+                  title="Início no Counter-Strike"
+                  description="Começou a jogar Counter-Strike aos 17 anos, iniciando uma jornada que duraria mais de duas décadas. O início de uma paixão que definiria toda sua trajetória profissional."
+                  icon={Gamepad2}
+                />
+                
+                <TimelineItem 
+                  year="2011"
+                  title="Top 9 Brasil em LAN"
+                  description="Como IGL (stand-in) do time freNzy!, alcançou o Top 9 do Brasil em LAN. Nick: conrado. Um marco importante que mostrou seu potencial competitivo e conhecimento estratégico do jogo."
+                  icon={Trophy}
+                  highlight
+                />
+                
                 <TimelineItemWithCarousel 
                   year="2014-2017"
                   title="Era DJ Hope - O Auge que ele deixou para trás"

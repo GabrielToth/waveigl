@@ -180,7 +180,7 @@ export default function MidiaKitPage() {
             />
             <StatCard 
               icon={Users} 
-              value="497k+" 
+              value="513k+" 
               label="Seguidores Totais" 
               subtext="Comunidade ativa"
             />
@@ -232,6 +232,13 @@ export default function MidiaKitPage() {
                 url="https://instagram.com/waveigl"
               />
               <PlatformCard 
+                name="Instagram DJ" 
+                followers="7.9k" 
+                viewShare="5%"
+                color="#E4405F"
+                url="https://instagram.com/hopedjoficial"
+              />
+              <PlatformCard 
                 name="TikTok" 
                 followers="500" 
                 viewShare="10%"
@@ -246,9 +253,23 @@ export default function MidiaKitPage() {
                 url="https://kick.com/waveigloficial"
               />
               <PlatformCard 
+                name="Facebook" 
+                followers="3.2k" 
+                viewShare="5%"
+                color="#1877F2"
+                url="https://facebook.com/waveigl"
+              />
+              <PlatformCard 
+                name="Facebook DJ" 
+                followers="4.9k" 
+                viewShare="5%"
+                color="#1877F2"
+                url="https://facebook.com/hopedjoficial"
+              />
+              <PlatformCard 
                 name="Outras" 
-                followers="Kwai, Facebook" 
-                viewShare="15%"
+                followers="Kwai" 
+                viewShare="5%"
                 color="#D9D9D9"
                 url="#"
               />

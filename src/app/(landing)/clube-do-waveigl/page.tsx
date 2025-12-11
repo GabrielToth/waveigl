@@ -260,7 +260,7 @@ export default function ClubePage() {
             
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
-              <StatCounter value={500} suffix="k" label="Seguidores" />
+              <StatCounter value={513} suffix="k" label="Seguidores" />
               <StatCounter value={2} suffix="M" label="Views/mês" />
               <StatCounter value={70} suffix="h" label="Live/semana" />
               <StatCounter value={500} suffix="k+" label="Alunos" />
@@ -526,10 +526,12 @@ export default function ClubePage() {
               { name: 'Twitch', url: 'https://twitch.tv/waveigl', followers: '440k', color: '#9146FF' },
               { name: 'YouTube', url: 'https://youtube.com/@waveigl', followers: '34.5k', color: '#FF0000' },
               { name: 'Instagram', url: 'https://instagram.com/waveigl', followers: '20.7k', color: '#E4405F' },
+              { name: 'Instagram DJ', url: 'https://instagram.com/hopedjoficial', followers: '7.9k', color: '#E4405F' },
               { name: 'Kick', url: 'https://kick.com/waveigloficial', followers: '840', color: '#53FC18' },
               { name: 'TikTok', url: 'https://tiktok.com/@waveigloficial', followers: '500', color: '#000000' },
               { name: 'Kwai', url: 'https://kwai.com/@waveigl', followers: '200', color: '#FF6600' },
               { name: 'Facebook', url: 'https://facebook.com/waveigl', followers: '3.2k', color: '#1877F2' },
+              { name: 'Facebook DJ', url: 'https://facebook.com/hopedjoficial', followers: '4.9k', color: '#1877F2' },
             ].map((platform) => (
               <a 
                 key={platform.name}
