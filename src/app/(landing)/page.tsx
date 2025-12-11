@@ -226,7 +226,7 @@ export default function LandingPage() {
             
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
-              <StatCounter value={440} suffix="k" label="Seguidores" />
+              <StatCounter value={500} suffix="k" label="Seguidores" />
               <StatCounter value={2} suffix="M" label="Views/mês" />
               <StatCounter value={70} suffix="h" label="Live/semana" />
               <StatCounter value={500} suffix="k+" label="Alunos" />
@@ -303,46 +303,24 @@ export default function LandingPage() {
               🎓 O mesmo conhecimento das aulas particulares
             </Badge>
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Compare e <span className="text-[#E38817]">Economize</span>
+              Escolha seu <span className="text-[#E38817]">Plano</span>
             </h2>
             <p className="text-[#D9D9D9]/60 text-lg">O conhecimento que transforma jogadores, agora acessível</p>
           </div>
           
-          <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-6">
-            {/* Aula Avulsa */}
-            <Card className="bg-[#1E202F]/30 border-[#E38817]/10">
-              <CardContent className="p-6 text-center">
-                <h3 className="text-lg font-bold text-[#D9D9D9]/60 mb-4">Aula Particular Avulsa</h3>
-                <div className="text-4xl font-black text-[#D9D9D9]/40 mb-2">R$149</div>
-                <div className="text-[#D9D9D9]/40 text-sm mb-6">/por aula</div>
-                <ul className="space-y-3 text-left text-sm text-[#D9D9D9]/50">
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 opacity-50" />
-                    Aula individual com WaveIGL
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 opacity-50" />
-                    Conteúdo personalizado
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 opacity-50" />
-                    Horário agendado
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Clube WaveIGL - Destaque */}
-            <Card className="relative bg-gradient-to-b from-[#1E202F]/80 to-[#0A0B0F] border-[#E38817]/30 shadow-2xl shadow-[#E38817]/10 overflow-hidden md:scale-105">
+          {/* Planos do Clube */}
+          <div className="max-w-3xl mx-auto grid md:grid-cols-2 gap-6 mb-16">
+            {/* Clube Mensal */}
+            <Card className="relative bg-gradient-to-b from-[#1E202F]/80 to-[#0A0B0F] border-[#E38817]/30 shadow-2xl shadow-[#E38817]/10 overflow-hidden">
               {/* Top glow */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#E38817] to-transparent" />
               
               <CardContent className="p-6 text-center">
                 <Badge className="mb-4 bg-[#E38817]/20 text-[#E38817] border-[#E38817]/30 px-3 py-1">
-                  <Star className="w-3 h-3 mr-1 fill-current" /> Melhor Custo-Benefício
+                  <Star className="w-3 h-3 mr-1 fill-current" /> Mais Popular
                 </Badge>
                 
-                <h3 className="text-xl font-bold text-[#D9D9D9] mb-4">Clube WaveIGL</h3>
+                <h3 className="text-xl font-bold text-[#D9D9D9] mb-4">Clube Mensal</h3>
                 
                 <div className="flex items-center justify-center space-x-2 mb-2">
                   <span className="text-5xl font-black text-[#E38817]">R$9,90</span>
@@ -361,7 +339,8 @@ export default function LandingPage() {
                     'Conteúdo exclusivo não gravado',
                     'Mesmo conhecimento das particulares',
                     'Comunidade fechada e selecionada',
-                    'Interação direta com WaveIGL'
+                    'Interação direta com WaveIGL',
+                    'Cancele quando quiser'
                   ].map((item, i) => (
                     <li key={i} className="flex items-center text-[#D9D9D9]/80">
                       <CheckCircle className="w-4 h-4 text-[#E38817] mr-2 flex-shrink-0" />
@@ -372,41 +351,96 @@ export default function LandingPage() {
                 
                 <Link href="/auth/login" className="block">
                   <Button className="w-full bg-gradient-to-r from-[#E38817] to-[#B86A10] hover:from-[#F59928] hover:to-[#E38817] text-white text-lg h-12 shadow-lg shadow-[#E38817]/25 transition-all hover:scale-[1.02]">
-                    Garantir Vaga
+                    Assinar Mensal
                   </Button>
                 </Link>
               </CardContent>
             </Card>
 
-            {/* Mensalidade */}
-            <Card className="bg-[#1E202F]/30 border-[#E38817]/10">
+            {/* Clube Vitalício */}
+            <Card className="relative bg-gradient-to-b from-[#1E202F]/80 to-[#0A0B0F] border-[#3B82F6]/30 shadow-2xl shadow-[#3B82F6]/10 overflow-hidden">
+              {/* Top glow */}
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent" />
+              
               <CardContent className="p-6 text-center">
-                <h3 className="text-lg font-bold text-[#D9D9D9]/60 mb-4">Mensalidade Particular</h3>
-                <div className="text-4xl font-black text-[#D9D9D9]/40 mb-2">R$499</div>
-                <div className="text-[#D9D9D9]/40 text-sm mb-6">/mês (1 aula/semana)</div>
-                <ul className="space-y-3 text-left text-sm text-[#D9D9D9]/50">
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 opacity-50" />
-                    4 aulas mensais individuais
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 opacity-50" />
-                    Acompanhamento semanal
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="w-4 h-4 mr-2 opacity-50" />
-                    Evolução personalizada
-                  </li>
+                <Badge className="mb-4 bg-[#3B82F6]/20 text-[#3B82F6] border-[#3B82F6]/30 px-3 py-1">
+                  ♾️ Para Sempre
+                </Badge>
+                
+                <h3 className="text-xl font-bold text-[#D9D9D9] mb-4">Clube Vitalício</h3>
+                
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <span className="text-5xl font-black text-[#3B82F6]">R$499</span>
+                  <div className="text-left">
+                    <div className="text-[#D9D9D9]/60 text-sm">pagamento único</div>
+                  </div>
+                </div>
+                
+                <div className="text-[#3B82F6]/80 text-sm mb-6 font-semibold">
+                  ⚡ Acesso permanente ao Clube
+                </div>
+                
+                <ul className="space-y-3 mb-6 text-left text-sm">
+                  {[
+                    'Tudo do plano mensal',
+                    'Acesso VITALÍCIO ao Clube',
+                    'Nunca mais pague mensalidade',
+                    'Prioridade em eventos especiais',
+                    'Badge exclusivo de fundador',
+                    'Equivale a ~4 anos de mensalidade'
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center text-[#D9D9D9]/80">
+                      <CheckCircle className="w-4 h-4 text-[#3B82F6] mr-2 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
                 </ul>
+                
+                <Link href="/auth/login" className="block">
+                  <Button className="w-full bg-gradient-to-r from-[#3B82F6] to-[#2563EB] hover:from-[#60A5FA] hover:to-[#3B82F6] text-white text-lg h-12 shadow-lg shadow-[#3B82F6]/25 transition-all hover:scale-[1.02]">
+                    Garantir Vitalício
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
-          
-          {/* Destaque de economia */}
-          <div className="text-center mt-12">
-            <p className="text-[#D9D9D9]/60 text-lg">
-              Com o Clube você economiza até <span className="text-[#E38817] font-bold">98%</span> comparado às aulas particulares
-            </p>
+
+          {/* Comparativo com Aulas Particulares */}
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <p className="text-[#D9D9D9]/40 text-sm uppercase tracking-wider">Compare com as aulas particulares</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              {/* Aula Avulsa */}
+              <Card className="bg-[#1E202F]/20 border-[#E38817]/5">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-[#D9D9D9]/50">Aula Particular Avulsa</h4>
+                    <p className="text-xs text-[#D9D9D9]/30">Aula individual 1h</p>
+                  </div>
+                  <div className="text-2xl font-black text-[#D9D9D9]/30">R$149</div>
+                </CardContent>
+              </Card>
+
+              {/* Mensalidade */}
+              <Card className="bg-[#1E202F]/20 border-[#E38817]/5">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-[#D9D9D9]/50">Mensalidade Particular</h4>
+                    <p className="text-xs text-[#D9D9D9]/30">1 aula por semana</p>
+                  </div>
+                  <div className="text-2xl font-black text-[#D9D9D9]/30">R$499/mês</div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Destaque de economia */}
+            <div className="text-center mt-8">
+              <p className="text-[#D9D9D9]/60 text-lg">
+                Com o Clube você economiza até <span className="text-[#E38817] font-bold">98%</span> comparado às aulas particulares
+              </p>
+            </div>
           </div>
         </div>
       </section>
