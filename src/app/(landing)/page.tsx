@@ -604,7 +604,6 @@ export default function HomePage() {
                   title="Produtor de Eventos e Concierge VIP"
                   description="Aos 18 anos, começou produzindo eventos com camarotes para amigos. Evoluiu para camarotes de R$3k, depois R$5k com bebidas à vontade. Construiu networking de alto nível, virando concierge para clientes milionários. Camarotes exclusivos para 2 pessoas a R$2,5k+ cada, além de comissão por bebida - um cliente chegou a gastar R$15k+ em champagne em uma noite. Lucro de R$14k+ por noite. Foi concierge de David Guetta (jantou com ele) e Alok."
                   icon={Award}
-                  highlight
                 />
                 
                 <TimelineItem 
@@ -628,7 +627,6 @@ export default function HomePage() {
                   title="Era DJ Hope - O Auge que ele deixou para trás"
                   description="No auge de sua carreira como DJ, tocando nas melhores baladas do Brasil como Café de la Musique, Oxygen Party e The Roof. WaveIGL tomou uma decisão que mudaria sua vida: inspirado em sua mãe, que era professora, decidiu abandonar tudo para se dedicar integralmente àquilo que realmente tinha expertise: ensinar Counter-Strike. Uma escolha corajosa de deixar o sucesso garantido para seguir sua verdadeira paixão."
                   icon={Music}
-                  highlight
                   images={[
                     { src: '/dj_hope/dj_hope_01.jpg', alt: 'DJ Hope no Café de la Musique', caption: 'Café de la Musique - No auge da carreira 🎧' },
                     { src: '/dj_hope/dj_hope_02.jpg', alt: 'DJ Hope no Oxygen Party', caption: 'Oxygen Party - Lotação máxima 🔥' },
@@ -649,7 +647,7 @@ export default function HomePage() {
                 
                 <TimelineItem 
                   year="2018"
-                  title="O Auge no CS"
+                  title="O Auge de audiência na Twitch"
                   description="Ano marcante com viralizações épicas, incluindo o famoso 'Gank do Skipinho' e outros momentos memoráveis que consolidaram Wave como referência no cenário de CS brasileiro."
                   icon={Target}
                   highlight
@@ -658,7 +656,7 @@ export default function HomePage() {
                 <TimelineItem 
                   year="2019-2023"
                   title="Crescimento Contínuo"
-                  description="Realizou diversos sorteios de itens raros, incluindo uma AWP Dragon Lore. Consolidou a comunidade e alcançou 440k+ seguidores na Twitch, ensinando mais de 500k alunos através das lives gratuitas."
+                  description="Realizou diversos sorteios de itens raros, incluindo uma AWP Dragon Lore. Consolidou a comunidade e alcançou 440k+ seguidores só na Twitch, ensinando mais de 500k alunos através das lives gratuitas."
                   icon={Award}
                 />
                 
