@@ -329,7 +329,7 @@ export default function HomePage() {
                 <p className="text-lg text-[#D9D9D9]/80 leading-relaxed mb-6">
                   Começou a jogar Counter-Strike em <span className="text-[#E38817] font-semibold">2001</span>, acumulando experiência competitiva que culminou em <span className="text-[#E38817] font-semibold">2011</span>, quando alcançou o <span className="text-[#E38817] font-semibold">Top 9 do Brasil em LAN</span> como IGL (stand-in) do time freNzy!. 
                   Em 2014, se tornou <span className="text-[#E38817] font-semibold">DJ profissional</span>, tocando nos melhores eventos 
-                  como <span className="text-[#E38817]">Café de la Musique, Oxygen Party, The Roof</span>, entre outros. Em 2017, por paixão ao ensino, 
+                  como <span className="text-[#E38817]">Café de la Musique, Oxygen Party, The Roof</span>, compartilhando palco com grandes nomes como <span className="text-[#E38817] font-semibold">David Guetta e Alok</span>, entre muitos outros. Em 2017, por paixão ao ensino, 
                   se dedicou integralmente ao streaming e educação em CS.
                 </p>
                 <p className="text-lg text-[#D9D9D9]/80 leading-relaxed">
@@ -383,14 +383,13 @@ export default function HomePage() {
                 <TimelineItemWithCarousel 
                   year="2014-2017"
                   title="Era DJ Hope - O Auge que ele deixou para trás"
-                  description="No auge de sua carreira como DJ, tocando nas melhores baladas do Brasil como Café de la Musique, Oxygen Party e The Roof, WaveIGL tomou uma decisão que mudaria sua vida. Inspirado em sua mãe, que era professora, decidiu abandonar tudo para se dedicar integralmente àquilo que realmente tinha expertise: ensinar Counter-Strike. Uma escolha corajosa de deixar o sucesso garantido para seguir sua verdadeira paixão."
+                  description="No auge de sua carreira como DJ, tocando nas melhores baladas do Brasil como Café de la Musique, Oxygen Party e The Roof. Compartilhou palco com grandes nomes da música eletrônica mundial como David Guetta, Alok e muitos outros DJs renomados. WaveIGL tomou uma decisão que mudaria sua vida: inspirado em sua mãe, que era professora, decidiu abandonar tudo para se dedicar integralmente àquilo que realmente tinha expertise: ensinar Counter-Strike. Uma escolha corajosa de deixar o sucesso garantido para seguir sua verdadeira paixão."
                   icon={Music}
                   highlight
                   images={[
-                    { src: '/images/dj/dj-hope-1.jpg', alt: 'DJ Hope no Café de la Musique', caption: 'Café de la Musique - No auge da carreira 🎧' },
-                    { src: '/images/dj/dj-hope-2.jpg', alt: 'DJ Hope no Oxygen Party', caption: 'Oxygen Party - Lotação máxima 🔥' },
-                    { src: '/images/dj/dj-hope-3.jpg', alt: 'DJ Hope no The Roof', caption: 'The Roof - Melhores baladas do Brasil 🎵' },
-                    { src: '/images/dj/dj-hope-4.jpg', alt: 'DJ Hope equipamentos', caption: 'Deixei tudo isso para seguir minha paixão: ensinar CS 🎮' }
+                    { src: '/dj_hope/dj_hope_01.jpg', alt: 'DJ Hope no Café de la Musique', caption: 'Café de la Musique - No auge da carreira 🎧' },
+                    { src: '/dj_hope/dj_hope_02.jpg', alt: 'DJ Hope no Oxygen Party', caption: 'Oxygen Party - Lotação máxima 🔥' },
+                    { src: '/dj_hope/dj_hope_03.jpg', alt: 'DJ Hope com David Guetta e Alok', caption: 'Compartilhando palco com David Guetta, Alok e muitos outros 🎵' }
                   ]}
                 />
                 
