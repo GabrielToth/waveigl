@@ -340,9 +340,8 @@ export default function HomePage() {
             </Card>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
               {[
-                { value: '440k+', label: 'Seguidores Twitch', icon: Users },
                 { value: '500k+', label: 'Alunos', icon: GraduationCap },
                 { value: '70h', label: 'Lives por Semana', icon: Gamepad2 },
                 { value: '7+', label: 'Anos Ensinando', icon: Award },
