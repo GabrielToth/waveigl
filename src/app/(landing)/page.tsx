@@ -65,6 +65,7 @@ function HeroCarousel() {
     { src: '/dj_hope/dj_hope_girls.jpg', alt: 'DJ Hope - Girls' },
     { src: '/dj_hope/dj_hope_jurere.jpg', alt: 'DJ Hope - Jurerê' },
     { src: '/dj_hope/dj_hope_and_4_girls.jpg', alt: 'DJ Hope - And 4 Girls' },
+    { src: '/dj_hope/dj_hope_oxygen_2.jpg', alt: 'DJ Hope - Oxygen Party' },
     { src: '/dj_hope/dj_hope_2_in_1_2.jpg', alt: 'DJ Hope - Concierge VIP' },
   ]
   
