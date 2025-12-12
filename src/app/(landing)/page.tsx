@@ -398,7 +398,10 @@ export default function HomePage() {
                   images={[
                     { src: '/dj_hope/dj_hope_01.jpg', alt: 'DJ Hope no Café de la Musique', caption: 'Café de la Musique - No auge da carreira 🎧' },
                     { src: '/dj_hope/dj_hope_02.jpg', alt: 'DJ Hope no Oxygen Party', caption: 'Oxygen Party - Lotação máxima 🔥' },
-                    { src: '/dj_hope/dj_hope_03.jpg', alt: 'DJ Hope com David Guetta e Alok', caption: 'Compartilhando palco com David Guetta, Alok e muitos outros 🎵' }
+                    { src: '/dj_hope/dj_hope_03.jpg', alt: 'DJ Hope com David Guetta e Alok', caption: 'Compartilhando palco com David Guetta, Alok e muitos outros 🎵' },
+                    { src: '/dj_hope/dj_hope_playboy_party.jpg', alt: 'DJ Hope na Playboy Party', caption: 'Playboy Party - Eventos exclusivos 🎉' },
+                    { src: '/dj_hope/dj_hope_the_roof.jpg', alt: 'DJ Hope no The Roof', caption: 'The Roof - Uma das melhores baladas do Brasil 🏙️' },
+                    { src: '/dj_hope/dj_hope_oxygen_party_jurere_internacional.jpg', alt: 'DJ Hope no Oxygen Party Jurerê Internacional', caption: 'Oxygen Party Jurerê Internacional - Verão no auge ☀️' }
                   ]}
                 />
                 
