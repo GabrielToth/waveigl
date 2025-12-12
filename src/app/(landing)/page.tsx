@@ -17,7 +17,8 @@ import {
   ExternalLink,
   ChevronLeft,
   ChevronRight,
-  Briefcase
+  Briefcase,
+  Server
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -372,6 +373,14 @@ export default function HomePage() {
                   title="Início no Counter-Strike"
                   description="Começou a jogar Counter-Strike aos 17 anos, iniciando uma jornada que duraria mais de duas décadas. O início de uma paixão que definiria toda sua trajetória profissional."
                   icon={Gamepad2}
+                />
+                
+                <TimelineItem 
+                  year="2005"
+                  title="NetRangers - Os Melhores Servidores da Época"
+                  description="Tinha 2 servidores NetRangers: um pessoal e outro público. Organizou 2 grupos de alunos - 'bad' e 'good'. O grupo 'bad' podia usar das 12h às 24h, e o grupo 'good' da meia-noite ao meio-dia. Com 40 mensalistas, eram considerados os melhores servidores da época, mostrando desde cedo sua capacidade de liderança e organização de comunidades."
+                  icon={Server}
+                  highlight
                 />
                 
                 <TimelineItem 
