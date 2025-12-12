@@ -63,7 +63,10 @@ function HeroCarousel() {
   const images = [
     { src: '/waveigl.webp', alt: 'WaveIGL - Professor de CS2' },
     { src: '/dj_hope/dj_hope_2_in_1.jpg', alt: 'DJ Hope - Mimadinha' },
+    { src: '/dj_hope/dj_hope_girls.jpg', alt: 'DJ Hope - Girls' },
     { src: '/dj_hope/dj_hope_jurere.jpg', alt: 'DJ Hope - Jurerê' },
+    { src: '/dj_hope/dj_hope_and_the_girl.jpg', alt: 'DJ Hope - And The Girl' },
+    { src: '/dj_hope/dj_hope_and_4_girls.jpg', alt: 'DJ Hope - And 4 Girls' },
     { src: '/dj_hope/dj_hope_2_in_1_2.jpg', alt: 'DJ Hope - Concierge VIP' },
   ]
   
@@ -507,12 +510,12 @@ export default function HomePage() {
                   Com mais de <span className="text-[#E38817] font-semibold">35 mil horas de jogo</span> e <span className="text-[#E38817] font-semibold">10 Milhões de pessoas alcançadas</span> nas redes sociais, 
                   Wave dedica sua carreira a ensinar e entreter jogadores de todos os níveis.
                 </p>
-                <p className="text-lg text-[#D9D9D9]/80 leading-relaxed">
+                <p className="text-lg text-[#D9D9D9]/80 leading-relaxed mb-6">
                   <span className="text-[#E38817] font-semibold">Giuzinha</span>, aluna do WaveIGL, representou o Brasil no cenário mundial feminino 
                   e conquistou o <span className="text-[#E38817] font-semibold">Top 5 no Mundial de CS2</span> pela Team Brazil.
                 </p>
 
-                <p className="text-lg text-[#D9D9D9]/80 leading-relaxed mb-6">
+                <p className="text-lg text-[#D9D9D9]/80 leading-relaxed">
                   Começou a jogar Counter-Strike em <span className="text-[#E38817] font-semibold">Junho de 2002</span>, acumulando experiência competitiva que culminou em <span className="text-[#E38817] font-semibold">2011</span>, quando alcançou o <span className="text-[#E38817] font-semibold">Top 9 do Brasil em LAN</span> como IGL (stand-in) do time freNzy!. 
                   Aos 18 anos, iniciou carreira como <span className="text-[#E38817] font-semibold">produtor de eventos</span>, evoluindo de camarotes de R$3k até se tornar <span className="text-[#E38817] font-semibold">concierge VIP</span> para clientes milionários - foi concierge e jantou com <span className="text-[#E38817] font-semibold">David Guetta</span> e já atendeu o <span className="text-[#E38817] font-semibold">Alok</span> como produtor de eventos. 
                   Em 2014, se tornou <span className="text-[#E38817] font-semibold">DJ profissional</span>, tocando nos melhores eventos 
