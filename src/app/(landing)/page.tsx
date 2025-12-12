@@ -62,9 +62,9 @@ function HeroCarousel() {
   
   const images = [
     { src: '/waveigl.webp', alt: 'WaveIGL - Professor de CS2' },
-    { src: '/hero/waveigl_produtor.jpg', alt: 'WaveIGL - Produtor de Eventos' },
-    { src: '/hero/waveigl_concierge.jpg', alt: 'WaveIGL - Concierge VIP' },
-    { src: '/hero/waveigl_dj.jpg', alt: 'WaveIGL - DJ Hope' },
+    { src: '/dj_hope/dj_hope_oficial_mimadinha.jpg', alt: 'DJ Hope - Mimadinha' },
+    { src: '/dj_hope/dj_hope_jurere.jpg', alt: 'DJ Hope - Jurerê' },
+    { src: '/dj_hope/dj_hope_concierge.jpg', alt: 'DJ Hope - Concierge VIP' },
   ]
   
   useEffect(() => {
@@ -456,7 +456,7 @@ export default function HomePage() {
                   +35 mil horas de CS • +500k alunos
                 </p>
                 <p className="text-base text-[#D9D9D9]/50 mb-8">
-                  O maior professor de Counter-Strike do Brasil
+                  O professor mais conectado e próximo de sua comunidade de Counter-Strike 2 de todo o Brasil.
                 </p>
                 
                 {/* CTA Buttons */}
