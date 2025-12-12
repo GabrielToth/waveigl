@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const supabase = getSupabaseAdmin()
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('email, subscription_status, subscription_id')
+      .select('email, subscription_status, subscription_id, full_name, phone_number, birth_date')
       .eq('id', userId)
       .single()
 
@@ -49,6 +49,45 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Email não cadastrado. Por favor, vincule uma conta com email.' }, 
         { status: 400 }
+      )
+    }
+
+    // Verificar se Discord está vinculado
+    const { data: discordConnection } = await supabase
+      .from('discord_connections')
+      .select('discord_id')
+      .eq('user_id', userId)
+      .single()
+
+    if (!discordConnection) {
+      return NextResponse.json(
+        { error: 'Você precisa vincular seu Discord antes de assinar. O Clube funciona via Discord.' }, 
+        { status: 400, reason: 'discord_required' }
+      )
+    }
+
+    // Verificar dados pessoais obrigatórios
+    if (!profile.full_name || !profile.phone_number || !profile.birth_date) {
+      return NextResponse.json(
+        { error: 'Preencha seus dados pessoais (nome, telefone e data de nascimento) antes de assinar.' }, 
+        { status: 400, reason: 'personal_data_required' }
+      )
+    }
+
+    // Verificar idade mínima de 18 anos
+    const birth = new Date(profile.birth_date)
+    const today = new Date()
+    let age = today.getFullYear() - birth.getFullYear()
+    const monthDiff = today.getMonth() - birth.getMonth()
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--
+    }
+    
+    if (age < 18) {
+      console.log('[Subscription] Usuário menor de 18 anos tentou assinar:', userId)
+      return NextResponse.json(
+        { error: 'Você precisa ter pelo menos 18 anos para assinar o Clube WaveIGL.' }, 
+        { status: 403, reason: 'underage' }
       )
     }
 

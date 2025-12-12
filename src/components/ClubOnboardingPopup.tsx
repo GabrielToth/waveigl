@@ -92,7 +92,7 @@ export default function ClubOnboardingPopup({
       return false
     }
     
-    // Verificar idade mínima (13 anos)
+    // Verificar idade mínima (18 anos - obrigatório para pagamento)
     const birth = new Date(birthDate)
     const today = new Date()
     let age = today.getFullYear() - birth.getFullYear()
@@ -101,8 +101,8 @@ export default function ClubOnboardingPopup({
       age--
     }
     
-    if (age < 13) {
-      setError('Você precisa ter pelo menos 13 anos')
+    if (age < 18) {
+      setError('Você precisa ter pelo menos 18 anos para assinar')
       return false
     }
     

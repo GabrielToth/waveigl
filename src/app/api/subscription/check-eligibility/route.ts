@@ -72,7 +72,23 @@ export async function GET(request: NextRequest) {
       missing.push('birth_date')
     }
 
-    // Se tudo está preenchido, está elegível
+    // Verificar idade mínima de 18 anos
+    let isUnderage = false
+    if (profile.birth_date) {
+      const birth = new Date(profile.birth_date)
+      const today = new Date()
+      let age = today.getFullYear() - birth.getFullYear()
+      const monthDiff = today.getMonth() - birth.getMonth()
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+        age--
+      }
+      if (age < 18) {
+        isUnderage = true
+        missing.push('underage')
+      }
+    }
+
+    // Se tudo está preenchido e maior de 18, está elegível
     const eligible = missing.length === 0
 
     return NextResponse.json({
