@@ -346,7 +346,8 @@ export function UnifiedChat({ messages, onSendMessage, isModerator, onModerate, 
       const response = await fetch('/api/chat/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform: sendPlatform, message: messageText })
+        body: JSON.stringify({ platform: sendPlatform, message: messageText }),
+        credentials: 'include'
       })
       
       if (response.ok) {
@@ -441,7 +442,8 @@ export function UnifiedChat({ messages, onSendMessage, isModerator, onModerate, 
         const response = await fetch('/api/chat/send', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ platform, message: messageText })
+          body: JSON.stringify({ platform, message: messageText }),
+          credentials: 'include'
         })
         return { platform, ok: response.ok }
       })
@@ -493,7 +495,8 @@ export function UnifiedChat({ messages, onSendMessage, isModerator, onModerate, 
       const response = await fetch('/api/chat/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform: msgToRetry.platform, message: msgToRetry.message })
+        body: JSON.stringify({ platform: msgToRetry.platform, message: msgToRetry.message }),
+        credentials: 'include'
       })
       
       if (response.ok) {

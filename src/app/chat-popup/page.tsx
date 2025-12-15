@@ -35,19 +35,32 @@ export default function ChatPopupPage() {
   useEffect(() => {
     const initializeUser = async () => {
       try {
-        const res = await fetch('/api/user')
+        const res = await fetch('/api/me', {
+          credentials: 'include' // Importante: enviar cookies
+        })
         if (res.ok) {
           const data = await res.json()
-          setUser(data.user)
-          setLinkedAccounts(data.linkedAccounts || [])
           
-          // Verificar se tem cargo de moderador
-          const role = getUserRole(data.linkedAccounts || [])
-          setIsModerator(['moderator', 'admin', 'owner', 'streamer'].includes(role))
-          
-          // Atualizar role do usuário
           if (data.user) {
-            setUser(prev => prev ? { ...prev, role } : null)
+            setUser({
+              id: data.user.id,
+              username: data.user.display_name || data.user.username || data.user.email,
+              email: data.user.email,
+              role: data.user.role
+            })
+            
+            // Mapear linked_accounts para o formato esperado
+            const accounts = (data.linked_accounts || []).map((acc: any) => ({
+              platform: acc.platform,
+              platform_user_id: acc.platform_user_id,
+              platform_username: acc.platform_username,
+              is_moderator: acc.is_moderator
+            }))
+            setLinkedAccounts(accounts)
+            
+            // Verificar se tem cargo de moderador
+            const role = data.user.role || getUserRole(accounts)
+            setIsModerator(['moderator', 'admin', 'owner', 'streamer'].includes(role) || data.user.is_moderator)
           }
         }
       } catch (error) {
@@ -201,7 +214,8 @@ export default function ChatPopupPage() {
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        credentials: 'include' // Importante: enviar cookies de sessão
       })
       
       const data = await res.json()
