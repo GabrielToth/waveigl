@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -20,6 +20,7 @@ import SubscriberBenefitsPopup from '@/components/SubscriberBenefitsPopup'
 import BenefitsPanel from '@/components/BenefitsPanel'
 import ClubOnboardingPopup from '@/components/ClubOnboardingPopup'
 import { getUserRole } from '@/lib/permissions'
+import { useSessionProvider } from '@/hooks/use-session-sync'
 
 // Configuração visual dos cargos
 const ROLE_CONFIG: Record<string, { label: string; color: string; bgColor: string; icon: React.ReactNode }> = {
@@ -238,6 +239,26 @@ export default function DashboardPage() {
     videoId: string | null
     liveChatId: string | null
   }>({ isLive: false, videoId: null, liveChatId: null })
+
+  // Sincronizar sessão com popups via BroadcastChannel
+  const sessionData = useMemo(() => ({
+    user: user ? {
+      id: user.id,
+      username: user.display_name || user.username || user.email,
+      email: user.email,
+      role: user.role
+    } : null,
+    linkedAccounts: linkedAccounts.map((acc: any) => ({
+      platform: acc.platform,
+      platform_user_id: acc.platform_user_id,
+      platform_username: acc.platform_username,
+      is_moderator: acc.is_moderator
+    })),
+    isModerator
+  }), [user, linkedAccounts, isModerator])
+  
+  // Hook que responde às solicitações de sessão do popup
+  useSessionProvider(sessionData)
 
   // Carregar dados do usuário
   const loadUser = async () => {

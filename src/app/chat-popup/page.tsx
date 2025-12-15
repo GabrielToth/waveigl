@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { UnifiedChat } from '@/components/UnifiedChat'
 import { Platform, UnifiedMessage } from '@/types'
 import { getUserRole } from '@/lib/permissions'
+import { useSessionReceiver, SessionData } from '@/hooks/use-session-sync'
 
 export default function ChatPopupPage() {
   const [messages, setMessages] = useState<UnifiedMessage[]>([])
@@ -25,51 +26,70 @@ export default function ChatPopupPage() {
     videoId: string | null
     liveChatId: string | null
   }>({ isLive: false, videoId: null, liveChatId: null })
+  const [sessionLoaded, setSessionLoaded] = useState(false)
   const linkedAccountsRef = useRef(linkedAccounts)
   
   useEffect(() => {
     linkedAccountsRef.current = linkedAccounts
   }, [linkedAccounts])
 
-  // Carregar dados do usuário
-  useEffect(() => {
-    const initializeUser = async () => {
-      try {
-        const res = await fetch('/api/me', {
-          credentials: 'include' // Importante: enviar cookies
-        })
-        if (res.ok) {
-          const data = await res.json()
-          
-          if (data.user) {
-            setUser({
-              id: data.user.id,
-              username: data.user.display_name || data.user.username || data.user.email,
-              email: data.user.email,
-              role: data.user.role
-            })
-            
-            // Mapear linked_accounts para o formato esperado
-            const accounts = (data.linked_accounts || []).map((acc: any) => ({
-              platform: acc.platform,
-              platform_user_id: acc.platform_user_id,
-              platform_username: acc.platform_username,
-              is_moderator: acc.is_moderator
-            }))
-            setLinkedAccounts(accounts)
-            
-            // Verificar se tem cargo de moderador
-            const role = data.user.role || getUserRole(accounts)
-            setIsModerator(['moderator', 'admin', 'owner', 'streamer'].includes(role) || data.user.is_moderator)
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao carregar dados do usuário:', error)
-      }
-    }
+  // Callback quando receber sessão via BroadcastChannel
+  const handleSessionReceived = useCallback((data: SessionData) => {
+    console.log('[ChatPopup] Sessão recebida via BroadcastChannel:', data.user?.username)
     
-    initializeUser()
+    if (data.user) {
+      setUser(data.user)
+      setLinkedAccounts(data.linkedAccounts as Array<{
+        platform: Platform
+        platform_user_id: string
+        platform_username: string
+        is_moderator?: boolean
+      }>)
+      setIsModerator(data.isModerator)
+    }
+    setSessionLoaded(true)
   }, [])
+
+  // Fallback: buscar dados via API se BroadcastChannel não funcionar
+  const fallbackFetch = useCallback(async () => {
+    console.log('[ChatPopup] Usando fallback API para carregar sessão')
+    try {
+      const res = await fetch('/api/me', {
+        credentials: 'include' // Importante: enviar cookies
+      })
+      if (res.ok) {
+        const data = await res.json()
+        
+        if (data.user) {
+          setUser({
+            id: data.user.id,
+            username: data.user.display_name || data.user.username || data.user.email,
+            email: data.user.email,
+            role: data.user.role
+          })
+          
+          // Mapear linked_accounts para o formato esperado
+          const accounts = (data.linked_accounts || []).map((acc: any) => ({
+            platform: acc.platform,
+            platform_user_id: acc.platform_user_id,
+            platform_username: acc.platform_username,
+            is_moderator: acc.is_moderator
+          }))
+          setLinkedAccounts(accounts)
+          
+          // Verificar se tem cargo de moderador
+          const role = data.user.role || getUserRole(accounts)
+          setIsModerator(['moderator', 'admin', 'owner', 'streamer'].includes(role) || data.user.is_moderator)
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar dados do usuário:', error)
+    }
+    setSessionLoaded(true)
+  }, [])
+
+  // Usar hook de sincronização de sessão
+  useSessionReceiver(handleSessionReceived, fallbackFetch)
 
   // SSE para mensagens do chat
   useEffect(() => {
